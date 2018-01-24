@@ -26,5 +26,6 @@ namespace MenuAPI
         }
     
         public virtual DbSet<Restaurant> Restaurants { get; set; }
+        public virtual DbSet<MenuItem> MenuItems { get; set; }
     }
 }

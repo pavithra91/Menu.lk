@@ -5,6 +5,21 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="SystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="MenuItem">
+          <Key>
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="ItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RestaurantID" Type="int" Nullable="false" />
+          <Property Name="ItemName" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ItemImage" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Required" Type="int" />
+          <Property Name="Additional" Type="int" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
         <EntityType Name="Restaurants">
           <Key>
             <PropertyRef Name="RestaurantID" />
@@ -19,8 +34,25 @@
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="IsDelete" Type="bit" Nullable="false" />
         </EntityType>
+        <Association Name="RestaurantID_fk_MenuItem">
+          <End Role="Restaurants" Type="Self.Restaurants" Multiplicity="1" />
+          <End Role="MenuItem" Type="Self.MenuItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Restaurants">
+              <PropertyRef Name="RestaurantID" />
+            </Principal>
+            <Dependent Role="MenuItem">
+              <PropertyRef Name="RestaurantID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="SystemModelStoreContainer">
+          <EntitySet Name="MenuItem" EntityType="Self.MenuItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Restaurants" EntityType="Self.Restaurants" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="RestaurantID_fk_MenuItem" Association="Self.RestaurantID_fk_MenuItem">
+            <End Role="Restaurants" EntitySet="Restaurants" />
+            <End Role="MenuItem" EntitySet="MenuItem" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -39,10 +71,44 @@
           <Property Name="R_DeliveryTime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="MenuItems" Relationship="SystemModel.RestaurantID_fk_MenuItem" FromRole="Restaurant" ToRole="MenuItem" />
         </EntityType>
         <EntityContainer Name="SystemEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Restaurants" EntityType="Self.Restaurant" />
+          <EntitySet Name="MenuItems" EntityType="SystemModel.MenuItem" />
+          <AssociationSet Name="RestaurantID_fk_MenuItem" Association="SystemModel.RestaurantID_fk_MenuItem">
+            <End Role="Restaurant" EntitySet="Restaurants" />
+            <End Role="MenuItem" EntitySet="MenuItems" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="MenuItem">
+          <Key>
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="ItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RestaurantID" Type="Int32" Nullable="false" />
+          <Property Name="ItemName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ItemImage" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Required" Type="Int32" />
+          <Property Name="Additional" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <NavigationProperty Name="Restaurant" Relationship="SystemModel.RestaurantID_fk_MenuItem" FromRole="MenuItem" ToRole="Restaurant" />
+        </EntityType>
+        <Association Name="RestaurantID_fk_MenuItem">
+          <End Type="SystemModel.Restaurant" Role="Restaurant" Multiplicity="1" />
+          <End Type="SystemModel.MenuItem" Role="MenuItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Restaurant">
+              <PropertyRef Name="RestaurantID" />
+            </Principal>
+            <Dependent Role="MenuItem">
+              <PropertyRef Name="RestaurantID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -61,6 +127,22 @@
                 <ScalarProperty Name="R_Name" ColumnName="R_Name" />
                 <ScalarProperty Name="R_Image" ColumnName="R_Image" />
                 <ScalarProperty Name="R_Tags" ColumnName="R_Tags" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MenuItems">
+            <EntityTypeMapping TypeName="SystemModel.MenuItem">
+              <MappingFragment StoreEntitySet="MenuItem">
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Additional" ColumnName="Additional" />
+                <ScalarProperty Name="Required" ColumnName="Required" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="ItemImage" ColumnName="ItemImage" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="RestaurantID" ColumnName="RestaurantID" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
