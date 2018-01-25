@@ -1,6 +1,7 @@
 ﻿using System.Web.Http;
 using System.Linq;
 using System;
+using System.Net.Http;
 
 namespace MenuAPI.Controllers
 {
@@ -17,12 +18,12 @@ namespace MenuAPI.Controllers
         }
 
         [HttpPost]
-        public dynamic GetItems()
+        public dynamic GetItems(int id)
         {
-            int Rid = 2;
-            if(Rid != 0)
+            int Rids = Convert.ToInt32(id);
+            if(Rids != 0)
             {
-                int RestaurantID = Convert.ToInt32(Rid);
+                int RestaurantID = Convert.ToInt32(id);
                 var json = _context.MenuItems.Where(w => w.IsActive == true && w.RestaurantID == RestaurantID).Select(i => new { i.ItemID, i.ItemName, i.Price, i.Description, i.ItemImage });
 
                 return json;
