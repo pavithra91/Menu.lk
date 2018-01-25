@@ -25,7 +25,7 @@ namespace MenuAPI
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Restaurant> Restaurants { get; set; }
         public virtual DbSet<MenuItem> MenuItems { get; set; }
+        public virtual DbSet<Restaurant> Restaurants { get; set; }
     }
 }

@@ -14,7 +14,7 @@
           <Property Name="ItemName" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="ItemImage" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Price" Type="varchar" MaxLength="53" />
           <Property Name="Required" Type="int" />
           <Property Name="Additional" Type="int" />
           <Property Name="IsActive" Type="bit" />
@@ -58,24 +58,9 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Restaurant">
-          <Key>
-            <PropertyRef Name="RestaurantID" />
-          </Key>
-          <Property Name="RestaurantID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="R_Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="R_Image" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="R_Tags" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="R_Rating" Type="Double" />
-          <Property Name="R_OpenTime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="R_DeliveryTime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="MenuItems" Relationship="SystemModel.RestaurantID_fk_MenuItem" FromRole="Restaurant" ToRole="MenuItem" />
-        </EntityType>
         <EntityContainer Name="SystemEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Restaurants" EntityType="Self.Restaurant" />
           <EntitySet Name="MenuItems" EntityType="SystemModel.MenuItem" />
+          <EntitySet Name="Restaurants" EntityType="SystemModel.Restaurant" />
           <AssociationSet Name="RestaurantID_fk_MenuItem" Association="SystemModel.RestaurantID_fk_MenuItem">
             <End Role="Restaurant" EntitySet="Restaurants" />
             <End Role="MenuItem" EntitySet="MenuItems" />
@@ -90,12 +75,27 @@
           <Property Name="ItemName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="ItemImage" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Price" Type="String" MaxLength="53" FixedLength="false" Unicode="false" />
           <Property Name="Required" Type="Int32" />
           <Property Name="Additional" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="IsDelete" Type="Boolean" />
           <NavigationProperty Name="Restaurant" Relationship="SystemModel.RestaurantID_fk_MenuItem" FromRole="MenuItem" ToRole="Restaurant" />
+        </EntityType>
+        <EntityType Name="Restaurant">
+          <Key>
+            <PropertyRef Name="RestaurantID" />
+          </Key>
+          <Property Name="RestaurantID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="R_Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="R_Image" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="R_Rating" Type="Double" />
+          <Property Name="R_OpenTime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="R_DeliveryTime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="R_Tags" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="MenuItems" Relationship="SystemModel.RestaurantID_fk_MenuItem" FromRole="Restaurant" ToRole="MenuItem" />
         </EntityType>
         <Association Name="RestaurantID_fk_MenuItem">
           <End Type="SystemModel.Restaurant" Role="Restaurant" Multiplicity="1" />
@@ -115,21 +115,6 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="SystemModelStoreContainer" CdmEntityContainer="SystemEntities">
-          <EntitySetMapping Name="Restaurants">
-            <EntityTypeMapping TypeName="SystemModel.Restaurant">
-              <MappingFragment StoreEntitySet="Restaurants">
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="R_DeliveryTime" ColumnName="R_DeliveryTime" />
-                <ScalarProperty Name="R_OpenTime" ColumnName="R_OpenTime" />
-                <ScalarProperty Name="R_Rating" ColumnName="R_Rating" />
-                <ScalarProperty Name="RestaurantID" ColumnName="RestaurantID" />
-                <ScalarProperty Name="R_Name" ColumnName="R_Name" />
-                <ScalarProperty Name="R_Image" ColumnName="R_Image" />
-                <ScalarProperty Name="R_Tags" ColumnName="R_Tags" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="MenuItems">
             <EntityTypeMapping TypeName="SystemModel.MenuItem">
               <MappingFragment StoreEntitySet="MenuItem">
@@ -143,6 +128,21 @@
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />
                 <ScalarProperty Name="RestaurantID" ColumnName="RestaurantID" />
                 <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Restaurants">
+            <EntityTypeMapping TypeName="SystemModel.Restaurant">
+              <MappingFragment StoreEntitySet="Restaurants">
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="R_Tags" ColumnName="R_Tags" />
+                <ScalarProperty Name="R_DeliveryTime" ColumnName="R_DeliveryTime" />
+                <ScalarProperty Name="R_OpenTime" ColumnName="R_OpenTime" />
+                <ScalarProperty Name="R_Rating" ColumnName="R_Rating" />
+                <ScalarProperty Name="R_Image" ColumnName="R_Image" />
+                <ScalarProperty Name="R_Name" ColumnName="R_Name" />
+                <ScalarProperty Name="RestaurantID" ColumnName="RestaurantID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

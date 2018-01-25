@@ -23,10 +23,10 @@ namespace MenuAPI
         public int RestaurantID { get; set; }
         public string R_Name { get; set; }
         public string R_Image { get; set; }
-        public string R_Tags { get; set; }
         public Nullable<double> R_Rating { get; set; }
         public string R_OpenTime { get; set; }
         public string R_DeliveryTime { get; set; }
+        public string R_Tags { get; set; }
         public bool IsActive { get; set; }
         public bool IsDelete { get; set; }
     
