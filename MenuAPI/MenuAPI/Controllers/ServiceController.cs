@@ -24,7 +24,7 @@ namespace MenuAPI.Controllers
             if(Rids != 0)
             {
                 int RestaurantID = Convert.ToInt32(id);
-                var json = _context.MenuItems.Where(w => w.IsActive == true && w.RestaurantID == RestaurantID).Select(i => new { i.ItemID, i.ItemName, i.Price, i.Description, i.ItemImage });
+                var json = _context.MenuItems.Where(w => w.IsActive == true && w.RestaurantID == RestaurantID).Select(i => new { i.ItemID, i.RestaurantID , i.ItemName, i.Price, i.Description, i.ItemImage });
 
                 return json;
             }
