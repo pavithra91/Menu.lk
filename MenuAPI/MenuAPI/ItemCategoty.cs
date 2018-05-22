@@ -12,23 +12,17 @@ namespace MenuAPI
     using System;
     using System.Collections.Generic;
     
-    public partial class Restaurant
+    public partial class ItemCategoty
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Restaurant()
+        public ItemCategoty()
         {
             this.MenuItems = new HashSet<MenuItem>();
         }
     
-        public int RestaurantID { get; set; }
-        public string R_Name { get; set; }
-        public string R_Image { get; set; }
-        public Nullable<double> R_Rating { get; set; }
-        public string R_OpenTime { get; set; }
-        public string R_DeliveryTime { get; set; }
-        public string R_Tags { get; set; }
-        public bool IsActive { get; set; }
-        public bool IsDelete { get; set; }
+        public int AUTOID { get; set; }
+        public string Name { get; set; }
+        public string SubHeading { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MenuItem> MenuItems { get; set; }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System;
 using System.Net.Http;
+using MenuAPI.App_Code;
 
 namespace MenuAPI.Controllers
 {
@@ -13,23 +14,30 @@ namespace MenuAPI.Controllers
         [HttpGet]
         public dynamic Get()
         {
-            var json = _context.Restaurants.Where(w => w.IsActive == true).Select(i => new { i.RestaurantID, i.R_Name, i.R_Image, i.R_OpenTime, i.R_DeliveryTime, i.R_Rating, i.R_Tags });
+            var json = _context.Restaurants.Where(w => w.IsActive == true).Select(i => new { _id= i.RestaurantID, name=i.R_Name, imageURL=i.R_Image, workingTime=i.R_OpenTime,takeaway= i.R_DeliveryTime,rating= i.R_Rating, category= i.R_Tags });
             return json;
         }
 
-        [HttpPost]
+        [HttpGet]
         public dynamic GetItems(int id)
         {
             int Rids = Convert.ToInt32(id);
             if(Rids != 0)
             {
                 int RestaurantID = Convert.ToInt32(id);
-                var json = _context.MenuItems.Where(w => w.IsActive == true && w.RestaurantID == RestaurantID).Select(i => new { i.ItemID, i.ItemName, i.Price, i.Description, i.ItemImage });
+                var json = _context.MenuItems.Where(w => w.IsActive == true && w.RestaurantID == RestaurantID).Select(i => new { _id = i.ItemID, name = i.ItemName, price = i.Price, description = i.Description, imageURL = i.ItemImage, type = i.ItemCategoty.Name, subhead = i.ItemCategoty.SubHeading });
 
                 return json;
             }
             
-            return "null";
+            return "null"; 
+        }
+        
+        [HttpPost]
+        public dynamic PlaceOrder(Order _order)
+        {
+            
+            return "Null";
         }       
     }
 }

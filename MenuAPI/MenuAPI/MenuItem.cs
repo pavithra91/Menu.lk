@@ -19,12 +19,14 @@ namespace MenuAPI
         public string ItemName { get; set; }
         public string Description { get; set; }
         public string ItemImage { get; set; }
-        public double Price { get; set; }
+        public string Price { get; set; }
         public Nullable<int> Required { get; set; }
         public Nullable<int> Additional { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<bool> IsDelete { get; set; }
+        public Nullable<int> Category { get; set; }
     
+        public virtual ItemCategoty ItemCategoty { get; set; }
         public virtual Restaurant Restaurant { get; set; }
     }
 }
