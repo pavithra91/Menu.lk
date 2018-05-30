@@ -10,6 +10,9 @@
         <EntityTypeShape EntityType="SystemModel.Restaurant" Width="1.5" PointX="0.75" PointY="1.25" />
         <AssociationConnector Association="SystemModel.ItemCategoryID" />
         <AssociationConnector Association="SystemModel.RestaurantID_fk_MenuItem" />
+        <EntityTypeShape EntityType="SystemModel.Customer" Width="1.5" PointX="5.375" PointY="0.875" />
+        <EntityTypeShape EntityType="SystemModel.CustomerOrder" Width="1.5" PointX="7.625" PointY="1" />
+        <AssociationConnector Association="SystemModel.Cus_fk_Orders" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

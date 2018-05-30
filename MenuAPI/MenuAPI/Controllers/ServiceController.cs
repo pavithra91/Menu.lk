@@ -36,8 +36,19 @@ namespace MenuAPI.Controllers
         [HttpPost]
         public dynamic PlaceOrder(Order _order)
         {
-            
-            return "Null";
+            Customer cus = new Customer();
+            cus.Email = "Test"; //_order.Email;
+            cus.Name =  _order.name;
+
+            _context.Customers.Add(cus);
+
+            CustomerOrder cusOrder = new CustomerOrder();
+            cusOrder.CustomerID = cus.CustomerID;
+            _context.CustomerOrders.Add(cusOrder);
+
+            _context.SaveChanges();
+
+            return "Test Message Sudu malli " + _order.name;
         }       
     }
 }

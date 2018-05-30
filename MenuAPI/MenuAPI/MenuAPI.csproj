@@ -205,6 +205,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Customer.cs">
+      <DependentUpon>Menudb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerOrder.cs">
+      <DependentUpon>Menudb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

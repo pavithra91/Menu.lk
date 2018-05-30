@@ -8,18 +8,19 @@ namespace MenuAPI.App_Code
     public class Order
     {
         public string OrderID { get; set; }
-        public string Name { get; set; }
-        public string TelephoneNo { get; set; }
-        public string Address { get; set; }
-        public string AdditionalInformation { get; set; }        
-        public List<OrderItem> ItemList { get; set; }
+        //public string Email { get; set; }
+        public string name { get; set; }
+        public string tel { get; set; }
+        public string address { get; set; }
+        public string notes { get; set; }        
+        public List<IMenuItem> ItemList { get; set; }
     }
 
-    public class OrderItem
+    public class IMenuItem
     {
-        public string ItemId { get; set; }
-        public string Name { get; set; }
-        public int qty { get; set; }
-        public string SpecialNote { get; set; }
+        public string _id { get; set; }
+        public string name { get; set; }
+        public int quantity { get; set; }
+        public string userNotes { get; set; }
     }
 }
