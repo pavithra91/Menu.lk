@@ -239,6 +239,9 @@
     <Compile Include="Restaurant.cs">
       <DependentUpon>Menudb.tt</DependentUpon>
     </Compile>
+    <Compile Include="ShoppingCart.cs">
+      <DependentUpon>Menudb.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

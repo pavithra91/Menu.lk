@@ -12,6 +12,8 @@
           <Property Name="CustomerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="100" />
           <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="TelephoneNo" Type="varchar" MaxLength="20" />
+          <Property Name="Address" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="CustomerOrder">
           <Key>
@@ -58,7 +60,18 @@
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="IsDelete" Type="bit" Nullable="false" />
         </EntityType>
-        <Association Name="Cus_fk_Orders">
+        <EntityType Name="ShoppingCart">
+          <Key>
+            <PropertyRef Name="AUTOID" />
+          </Key>
+          <Property Name="AUTOID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderID" Type="int" />
+          <Property Name="ItemID" Type="int" />
+          <Property Name="Qty" Type="int" />
+          <Property Name="Price" Type="float" />
+          <Property Name="ItemNote" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <Association Name="CustomerId_fk_Customers">
           <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
           <End Role="CustomerOrder" Type="Self.CustomerOrder" Multiplicity="*" />
           <ReferentialConstraint>
@@ -82,6 +95,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="ItemId_fk_Items">
+          <End Role="MenuItem" Type="Self.MenuItem" Multiplicity="0..1" />
+          <End Role="ShoppingCart" Type="Self.ShoppingCart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MenuItem">
+              <PropertyRef Name="ItemID" />
+            </Principal>
+            <Dependent Role="ShoppingCart">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="RestaurantID_fk_MenuItem">
           <End Role="Restaurants" Type="Self.Restaurants" Multiplicity="1" />
           <End Role="MenuItem" Type="Self.MenuItem" Multiplicity="*" />
@@ -100,13 +125,18 @@
           <EntitySet Name="ItemCategoty" EntityType="Self.ItemCategoty" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MenuItem" EntityType="Self.MenuItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Restaurants" EntityType="Self.Restaurants" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="Cus_fk_Orders" Association="Self.Cus_fk_Orders">
+          <EntitySet Name="ShoppingCart" EntityType="Self.ShoppingCart" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="CustomerId_fk_Customers" Association="Self.CustomerId_fk_Customers">
             <End Role="Customer" EntitySet="Customer" />
             <End Role="CustomerOrder" EntitySet="CustomerOrder" />
           </AssociationSet>
           <AssociationSet Name="ItemCategoryID" Association="Self.ItemCategoryID">
             <End Role="ItemCategoty" EntitySet="ItemCategoty" />
             <End Role="MenuItem" EntitySet="MenuItem" />
+          </AssociationSet>
+          <AssociationSet Name="ItemId_fk_Items" Association="Self.ItemId_fk_Items">
+            <End Role="MenuItem" EntitySet="MenuItem" />
+            <End Role="ShoppingCart" EntitySet="ShoppingCart" />
           </AssociationSet>
           <AssociationSet Name="RestaurantID_fk_MenuItem" Association="Self.RestaurantID_fk_MenuItem">
             <End Role="Restaurants" EntitySet="Restaurants" />
@@ -118,24 +148,48 @@
     <edmx:ConceptualModels>
       <Schema Namespace="SystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="SystemEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Customers" EntityType="SystemModel.Customer" />
+          <EntitySet Name="CustomerOrders" EntityType="SystemModel.CustomerOrder" />
           <EntitySet Name="ItemCategoties" EntityType="SystemModel.ItemCategoty" />
           <EntitySet Name="MenuItems" EntityType="SystemModel.MenuItem" />
           <EntitySet Name="Restaurants" EntityType="SystemModel.Restaurant" />
+          <EntitySet Name="ShoppingCarts" EntityType="SystemModel.ShoppingCart" />
+          <AssociationSet Name="CustomerId_fk_Customers" Association="SystemModel.CustomerId_fk_Customers">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="CustomerOrder" EntitySet="CustomerOrders" />
+          </AssociationSet>
           <AssociationSet Name="ItemCategoryID" Association="SystemModel.ItemCategoryID">
             <End Role="ItemCategoty" EntitySet="ItemCategoties" />
             <End Role="MenuItem" EntitySet="MenuItems" />
+          </AssociationSet>
+          <AssociationSet Name="ItemId_fk_Items" Association="SystemModel.ItemId_fk_Items">
+            <End Role="MenuItem" EntitySet="MenuItems" />
+            <End Role="ShoppingCart" EntitySet="ShoppingCarts" />
           </AssociationSet>
           <AssociationSet Name="RestaurantID_fk_MenuItem" Association="SystemModel.RestaurantID_fk_MenuItem">
             <End Role="Restaurant" EntitySet="Restaurants" />
             <End Role="MenuItem" EntitySet="MenuItems" />
           </AssociationSet>
-          <EntitySet Name="Customers" EntityType="SystemModel.Customer" />
-          <EntitySet Name="CustomerOrders" EntityType="SystemModel.CustomerOrder" />
-          <AssociationSet Name="Cus_fk_Orders" Association="SystemModel.Cus_fk_Orders">
-            <End Role="Customer" EntitySet="Customers" />
-            <End Role="CustomerOrder" EntitySet="CustomerOrders" />
-          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="TelephoneNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CustomerOrders" Relationship="SystemModel.CustomerId_fk_Customers" FromRole="Customer" ToRole="CustomerOrder" />
+        </EntityType>
+        <EntityType Name="CustomerOrder">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerID" Type="Int32" />
+          <NavigationProperty Name="Customer" Relationship="SystemModel.CustomerId_fk_Customers" FromRole="CustomerOrder" ToRole="Customer" />
+        </EntityType>
         <EntityType Name="ItemCategoty">
           <Key>
             <PropertyRef Name="AUTOID" />
@@ -161,6 +215,7 @@
           <Property Name="IsDelete" Type="Boolean" />
           <Property Name="Category" Type="Int32" />
           <NavigationProperty Name="ItemCategoty" Relationship="SystemModel.ItemCategoryID" FromRole="MenuItem" ToRole="ItemCategoty" />
+          <NavigationProperty Name="ShoppingCarts" Relationship="SystemModel.ItemId_fk_Items" FromRole="MenuItem" ToRole="ShoppingCart" />
           <NavigationProperty Name="Restaurant" Relationship="SystemModel.RestaurantID_fk_MenuItem" FromRole="MenuItem" ToRole="Restaurant" />
         </EntityType>
         <EntityType Name="Restaurant">
@@ -178,6 +233,30 @@
           <Property Name="IsDelete" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="MenuItems" Relationship="SystemModel.RestaurantID_fk_MenuItem" FromRole="Restaurant" ToRole="MenuItem" />
         </EntityType>
+        <EntityType Name="ShoppingCart">
+          <Key>
+            <PropertyRef Name="AUTOID" />
+          </Key>
+          <Property Name="AUTOID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="Int32" />
+          <Property Name="ItemID" Type="Int32" />
+          <Property Name="Qty" Type="Int32" />
+          <Property Name="Price" Type="Double" />
+          <Property Name="ItemNote" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="MenuItem" Relationship="SystemModel.ItemId_fk_Items" FromRole="ShoppingCart" ToRole="MenuItem" />
+        </EntityType>
+        <Association Name="CustomerId_fk_Customers">
+          <End Type="SystemModel.Customer" Role="Customer" Multiplicity="0..1" />
+          <End Type="SystemModel.CustomerOrder" Role="CustomerOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="CustomerOrder">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="ItemCategoryID">
           <End Type="SystemModel.ItemCategoty" Role="ItemCategoty" Multiplicity="0..1" />
           <End Type="SystemModel.MenuItem" Role="MenuItem" Multiplicity="*" />
@@ -187,6 +266,18 @@
             </Principal>
             <Dependent Role="MenuItem">
               <PropertyRef Name="Category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ItemId_fk_Items">
+          <End Type="SystemModel.MenuItem" Role="MenuItem" Multiplicity="0..1" />
+          <End Type="SystemModel.ShoppingCart" Role="ShoppingCart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MenuItem">
+              <PropertyRef Name="ItemID" />
+            </Principal>
+            <Dependent Role="ShoppingCart">
+              <PropertyRef Name="ItemID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -202,41 +293,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Customer">
-          <Key>
-            <PropertyRef Name="CustomerID" />
-          </Key>
-          <Property Name="CustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="CustomerOrders" Relationship="SystemModel.Cus_fk_Orders" FromRole="Customer" ToRole="CustomerOrder" />
-        </EntityType>
-        <EntityType Name="CustomerOrder">
-          <Key>
-            <PropertyRef Name="OrderID" />
-          </Key>
-          <Property Name="OrderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerID" Type="Int32" />
-          <NavigationProperty Name="Customer" Relationship="SystemModel.Cus_fk_Orders" FromRole="CustomerOrder" ToRole="Customer" />
-        </EntityType>
-        <Association Name="Cus_fk_Orders">
-          <End Type="SystemModel.Customer" Role="Customer" Multiplicity="0..1" />
-          <End Type="SystemModel.CustomerOrder" Role="CustomerOrder" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customer">
-              <PropertyRef Name="CustomerID" />
-            </Principal>
-            <Dependent Role="CustomerOrder">
-              <PropertyRef Name="CustomerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="SystemModelStoreContainer" CdmEntityContainer="SystemEntities">
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="SystemModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="TelephoneNo" ColumnName="TelephoneNo" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerOrders">
+            <EntityTypeMapping TypeName="SystemModel.CustomerOrder">
+              <MappingFragment StoreEntitySet="CustomerOrder">
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ItemCategoties">
             <EntityTypeMapping TypeName="SystemModel.ItemCategoty">
               <MappingFragment StoreEntitySet="ItemCategoty">
@@ -278,20 +359,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Customers">
-            <EntityTypeMapping TypeName="SystemModel.Customer">
-              <MappingFragment StoreEntitySet="Customer">
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CustomerOrders">
-            <EntityTypeMapping TypeName="SystemModel.CustomerOrder">
-              <MappingFragment StoreEntitySet="CustomerOrder">
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <EntitySetMapping Name="ShoppingCarts">
+            <EntityTypeMapping TypeName="SystemModel.ShoppingCart">
+              <MappingFragment StoreEntitySet="ShoppingCart">
+                <ScalarProperty Name="ItemNote" ColumnName="ItemNote" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="AUTOID" ColumnName="AUTOID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

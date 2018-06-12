@@ -23,6 +23,8 @@ namespace MenuAPI
         public int CustomerID { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+        public string TelephoneNo { get; set; }
+        public string Address { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomerOrder> CustomerOrders { get; set; }

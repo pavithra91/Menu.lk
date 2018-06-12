@@ -5,14 +5,16 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="4caea096074f42ab978e5c79e2cf4476" Name="Diagram1">
-        <EntityTypeShape EntityType="SystemModel.ItemCategoty" Width="1.5" PointX="0.75" PointY="5.875" />
+        <EntityTypeShape EntityType="SystemModel.Customer" Width="1.5" PointX="2.75" PointY="5.875" />
+        <EntityTypeShape EntityType="SystemModel.CustomerOrder" Width="1.5" PointX="5" PointY="6.25" />
+        <EntityTypeShape EntityType="SystemModel.ItemCategoty" Width="1.5" PointX="0.75" PointY="6" />
         <EntityTypeShape EntityType="SystemModel.MenuItem" Width="1.5" PointX="3" PointY="1" />
-        <EntityTypeShape EntityType="SystemModel.Restaurant" Width="1.5" PointX="0.75" PointY="1.25" />
+        <EntityTypeShape EntityType="SystemModel.Restaurant" Width="1.5" PointX="0.75" PointY="1.375" />
+        <EntityTypeShape EntityType="SystemModel.ShoppingCart" Width="1.5" PointX="5.25" PointY="1.625" />
+        <AssociationConnector Association="SystemModel.CustomerId_fk_Customers" />
         <AssociationConnector Association="SystemModel.ItemCategoryID" />
+        <AssociationConnector Association="SystemModel.ItemId_fk_Items" />
         <AssociationConnector Association="SystemModel.RestaurantID_fk_MenuItem" />
-        <EntityTypeShape EntityType="SystemModel.Customer" Width="1.5" PointX="5.375" PointY="0.875" />
-        <EntityTypeShape EntityType="SystemModel.CustomerOrder" Width="1.5" PointX="7.625" PointY="1" />
-        <AssociationConnector Association="SystemModel.Cus_fk_Orders" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

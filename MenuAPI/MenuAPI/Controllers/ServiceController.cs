@@ -36,19 +36,50 @@ namespace MenuAPI.Controllers
         [HttpPost]
         public dynamic PlaceOrder(Order _order)
         {
-            Customer cus = new Customer();
-            cus.Email = "Test"; //_order.Email;
-            cus.Name =  _order.name;
+            try
+            {
+                Customer cus = _context.Customers.Where(w => w.Email == _order.email).FirstOrDefault();
+                int CustomerID = 0;
+                if (cus == null)
+                {
+                    Customer _objCus = new Customer();
+                    _objCus.Name = _order.name;
+                    _objCus.Email = _order.email;
+                    _objCus.Address = _order.address;
+                    _objCus.TelephoneNo = _order.tel;
 
-            _context.Customers.Add(cus);
+                    _context.Customers.Add(_objCus);
+                    _context.SaveChanges();
 
-            CustomerOrder cusOrder = new CustomerOrder();
-            cusOrder.CustomerID = cus.CustomerID;
-            _context.CustomerOrders.Add(cusOrder);
+                    CustomerID = _objCus.CustomerID;
+                }
+                else
+                {
+                    CustomerID = cus.CustomerID;
+                }
 
-            _context.SaveChanges();
+                CustomerOrder _cusOrder = new CustomerOrder();
+                _cusOrder.CustomerID = CustomerID;
+                _context.CustomerOrders.Add(_cusOrder);
+                _context.SaveChanges();
 
-            return "Test Message Sudu malli " + _order.name;
+                foreach (var items in _order.ItemList)
+                {
+                    ShoppingCart cusOrder = new ShoppingCart();
+                    cusOrder.ItemID = Convert.ToInt32(items._id);
+                    cusOrder.Qty = Convert.ToInt32(items.quantity);
+                    cusOrder.Price = Convert.ToDouble(items.price);
+                    cusOrder.ItemNote = items.userNotes;
+
+                    _context.ShoppingCarts.Add(cusOrder);
+                }
+
+                return "Your Order Place Sucessfully. Order ID : " + _cusOrder.OrderID;
+            }
+            catch(Exception ex)
+            {
+                return "Error. Error Msg : " + ex.Message;
+            }
         }       
     }
 }

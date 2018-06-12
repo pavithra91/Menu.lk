@@ -14,6 +14,12 @@ namespace MenuAPI
     
     public partial class MenuItem
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public MenuItem()
+        {
+            this.ShoppingCarts = new HashSet<ShoppingCart>();
+        }
+    
         public int ItemID { get; set; }
         public int RestaurantID { get; set; }
         public string ItemName { get; set; }
@@ -27,6 +33,8 @@ namespace MenuAPI
         public Nullable<int> Category { get; set; }
     
         public virtual ItemCategoty ItemCategoty { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; }
         public virtual Restaurant Restaurant { get; set; }
     }
 }
