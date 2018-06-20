@@ -66,12 +66,14 @@ namespace MenuAPI.Controllers
                 foreach (var items in _order.ItemList)
                 {
                     ShoppingCart cusOrder = new ShoppingCart();
+                    cusOrder.OrderID = _cusOrder.OrderID;
                     cusOrder.ItemID = Convert.ToInt32(items._id);
                     cusOrder.Qty = Convert.ToInt32(items.quantity);
                     cusOrder.Price = Convert.ToDouble(items.price);
                     cusOrder.ItemNote = items.userNotes;
 
                     _context.ShoppingCarts.Add(cusOrder);
+                    _context.SaveChanges();
                 }
 
                 return "Your Order Place Sucessfully. Order ID : " + _cusOrder.OrderID;
